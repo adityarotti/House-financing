@@ -1,0 +1,50 @@
+{
+  "New house": {
+    "raw_house_cost": 470000.0,
+    "mortgage_rate": 3.9,
+    "yearly_repayment": 3.0,
+    "nebenkosten": 400.0,
+    "inflation": 2.7,
+    "house_inflation": 2.7,
+    "loan_period": 37,
+    "down_payment": 30000.0,
+    "broker_commission": 0.0,
+    "notary": 1.5,
+    "land_registry": 0.5,
+    "land_transfer_tax": 5.0,
+    "monthly_rent": 1800.0,
+    "timestamp": "2025-04-05T06:05:55"
+  },
+  "Old house": {
+    "raw_house_cost": 350000.0,
+    "mortgage_rate": 3.9,
+    "yearly_repayment": 3.0,
+    "nebenkosten": 400.0,
+    "inflation": 2.7,
+    "house_inflation": 2.7,
+    "loan_period": 37,
+    "down_payment": 30000.0,
+    "broker_commission": 3.57,
+    "notary": 1.5,
+    "land_registry": 0.5,
+    "land_transfer_tax": 5.0,
+    "monthly_rent": 1300.0,
+    "timestamp": "2025-04-05T06:05:41"
+  },
+  "Old house 2": {
+    "raw_house_cost": 465000.0,
+    "mortgage_rate": 3.6,
+    "yearly_repayment": 5.0,
+    "nebenkosten": 280.0,
+    "inflation": 2.7,
+    "house_inflation": 2.7,
+    "loan_period": 37,
+    "down_payment": 100000.0,
+    "broker_commission": 3.6,
+    "notary": 1.5,
+    "land_registry": 0.5,
+    "land_transfer_tax": 5.0,
+    "monthly_rent": 1250.0,
+    "timestamp": "2025-04-06T07:29:34"
+  }
+}
