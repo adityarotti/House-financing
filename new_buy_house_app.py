@@ -6,7 +6,6 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolb
 import json
 import os
 
-
 class HouseCalculatorApp:
     def __init__(self, root):
         self.root = root
@@ -542,7 +541,7 @@ class HouseCalculatorApp:
             idx=np.where(np.cumsum(principle_repayment)==max(np.cumsum(principle_repayment)))[0][0]
             delta=abs(max(np.cumsum(principle_repayment))-loan_amount)
             principle_repayment[idx+1] = min(delta,monthly_repayment)
-            print(delta,principle_repayment[idx+1],monthly_repayment)
+            # print(delta,principle_repayment[idx+1],monthly_repayment)
         total_repayment = interest_repayment + principle_repayment
         extra_cost = misc_costs + max(np.cumsum(interest_repayment))
         self.extra_costs_display.set(
@@ -573,6 +572,7 @@ class HouseCalculatorApp:
         self.ax1.axhline(loan_amount, color="k", linestyle="--", label="Loan Amount")
         self.ax1.axhline(raw_house_cost + misc_costs, color="m", linestyle="-", label="Practical house cost", lw=2)
         self.ax1.axhline(raw_house_cost, color="c", linestyle="-.", label="Raw house cost", lw=1,alpha=0.7)
+        self.ax1.axhline(extra_cost, color="gray", linestyle="-", label="Extra house buying cost", lw=2)
         self.ax1.set_title("House buying costs", fontsize=12)
         self.ax1.legend(loc='upper left')
         self.ax1.grid()
