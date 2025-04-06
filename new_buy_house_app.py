@@ -60,6 +60,10 @@ class HouseCalculatorApp:
         # Input mode selection
         self.input_mode = tk.StringVar(value="entries")
 
+        # # Log scale toggle
+        self.log_scale = tk.BooleanVar(value=True)  #
+
+
         # Create main frames
         self.main_frame = ttk.Frame(self.root)
         self.main_frame.pack(fill=tk.BOTH, expand=True)
@@ -163,6 +167,16 @@ class HouseCalculatorApp:
         ttk.Radiobutton(mode_frame, text="Sliders", variable=self.input_mode, value="sliders",
                         command=self.toggle_input_mode).pack(side=tk.LEFT, padx=5)
 
+        # Log scale toggle switch
+        switch_frame = ttk.Frame(self.input_frame)
+        switch_frame.pack(pady=5)
+        ttk.Label(switch_frame, text="Log Scale:").pack(side=tk.LEFT)
+        ttk.Checkbutton(
+            switch_frame,
+            text="ON/OFF",
+            variable=self.log_scale,
+            command=self.update_plots
+        ).pack(side=tk.LEFT, padx=5)
 
         # Frame for sliders
         self.entries_frame = ttk.Frame(self.input_frame)
@@ -542,6 +556,8 @@ class HouseCalculatorApp:
             delta=abs(max(np.cumsum(principle_repayment))-loan_amount)
             principle_repayment[idx+1] = min(delta,monthly_repayment)
             # print(delta,principle_repayment[idx+1],monthly_repayment)
+
+        pcidx = idx+5*12 # When payment is complete
         total_repayment = interest_repayment + principle_repayment
         extra_cost = misc_costs + max(np.cumsum(interest_repayment))
         self.extra_costs_display.set(
@@ -566,17 +582,24 @@ class HouseCalculatorApp:
         self.ax1.plot(months, np.cumsum(interest_repayment), lw=2,
                       label="Interest Repayment [" + str(round(max(np.cumsum(interest_repayment)), 0)) + "]")
         self.ax1.plot(months, np.cumsum(principle_repayment) + np.cumsum(interest_repayment) + upfront_costs, lw=2,
-                      label="Principle + Interest + Misc. + Downpayment")
+                      label="Principle + Interest + Misc. + Down payment")
         self.ax1.plot(months, cumulative_rent, lw=2, label="Cumulative Rent")
         self.ax1.plot(months, house_valuation, lw=2, label="House Valuation")
         self.ax1.axhline(loan_amount, color="k", linestyle="--", label="Loan Amount")
         self.ax1.axhline(raw_house_cost + misc_costs, color="m", linestyle="-", label="Practical house cost", lw=2)
         self.ax1.axhline(raw_house_cost, color="c", linestyle="-.", label="Raw house cost", lw=1,alpha=0.7)
         self.ax1.axhline(extra_cost, color="gray", linestyle="-", label="Extra house buying cost", lw=2)
+        self.ax1.plot(months, raw_house_cost - np.cumsum(principle_repayment) - down_payment   , lw=2, label="Pending loan amount")
         self.ax1.set_title("House buying costs", fontsize=12)
-        self.ax1.legend(loc='upper left')
+        self.ax1.legend(loc=0,ncol=2)
         self.ax1.grid()
         self.ax1.set_ylabel("Amount ($)", fontsize=10)
+        self.ax1.set_xlim(0,months[pcidx])
+        self.ax1.set_ylim(1e4, (raw_house_cost + extra_cost)*1.5)
+        if self.log_scale.get():
+            self.ax1.semilogy()
+        else:
+            self.ax1.set_yscale('linear')
 
         # Update second subplot (House valuation vs Rent Analysis)
         delta_min=((-profit) - (cumulative_rent - other_costs))**2
@@ -591,7 +614,7 @@ class HouseCalculatorApp:
         self.ax2.set_ylim(-profit[idx]-(-profit[idx]*2),-profit[idx]+(-profit[idx]*2))
         self.ax2.set_xlabel("Years", fontsize=10)
         self.ax2.set_ylabel("Money lost ($)", fontsize=10)
-
+        self.ax2.set_xlim(0, months[pcidx])
         # Set common x-axis ticks (only show years)
         years = np.arange(1, loan_period + 1)
         self.ax2.set_xticks(years * 12)
