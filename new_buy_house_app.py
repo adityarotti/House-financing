@@ -254,7 +254,7 @@ class HouseCalculatorApp:
                 width=10
             )
             entry.pack(side=tk.LEFT)
-            # entry.bind("<Return>", lambda e, v=var, dv=display_var: self.update_from_entry(v, dv))
+            entry.bind("<Return>", lambda e, v=var, dv=display_var: self.update_from_entry(v, dv))
             entry.bind("<FocusOut>", lambda e, v=var, dv=display_var: self.update_from_entry(v, dv))
 
     def toggle_input_mode(self):
